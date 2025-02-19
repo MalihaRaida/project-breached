@@ -9,11 +9,11 @@
 <body>
     <div class="container">
         {% if found %}
-            <h3>User found!</h3>
+            <h3>User Credentials exist in the database!</h3>
         {% else %}
-            <h3>User not found.</h3>
+            <h3>User Credentials are unique.</h3>
         {% endif %}
-        <p>Query execution time: {{ time|round(6) }} seconds</p>
+        <p>Query execution time: {{ time|round(3) }} seconds</p>
         <a href="/">Go Back</a>
     </div>
 </body>

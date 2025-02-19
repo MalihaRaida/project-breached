@@ -15,7 +15,8 @@ def get_user(email,password):
     start_time = time.time()
     query = "SELECT * FROM USER WHERE email = %s AND password = %s"
     cursor.execute(query, (email, password))
-    result = cursor.fetchone()
+    user_exists = cursor.fetchone()
     query_time = time.time() - start_time
     cursor.close()
     db.close()
+    return user_exists, query_time
