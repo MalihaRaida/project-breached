@@ -5,15 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Check</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+
+        async function hashInput(string) {
+            const utf8 = new TextEncoder().encode(string);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray
+                .map((bytes) => bytes.toString(16).padStart(2, '0'))
+                .join('');
+            return hashHex;
+        }
+
+        async function hashAndSubmit(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const hashedEmail = await hashInput(email);
+            const hashedPassword = await hashInput(password);
+            console.log(hashedEmail);
+            document.getElementById('hashedEmail').value = hashedEmail;
+            document.getElementById('hashedPassword').value = hashedPassword;
+
+            document.getElementById('loginCredential').submit();
+        }
+    </script>
 </head>
 <body>
     <div class="container">
         <h2>Check Login Credentials</h2>
-        <form action="/" method="post">
+        <form id="loginCredential" action="/" method="post" onsubmit="hashAndSubmit(event)">
             <label>Email:</label>
-            <input type="email" name="email" required>
+            <input type="email" id="email" required>
             <label>Password:</label>
-            <input type="password" name="password" required>
+            <input type="password" id="password" required>
+            <input type="hidden" name="email" id="hashedEmail">
+            <input type="hidden" name="password" id="hashedPassword">
             <button type="submit">Check</button>
         </form>
     </div>
